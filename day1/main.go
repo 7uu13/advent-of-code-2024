@@ -10,17 +10,18 @@ import (
 	"strings"
 )
 
-func partOne() {
-	file, err := os.ReadFile("input.txt")
+var (
+	left  []int
+	right []int
+)
+
+func parseInput(input string) ([]int, []int) {
+	file, err := os.ReadFile(input)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	lines := strings.Split(string(file), "\n")
-
-	var left []int
-	var right []int
-	var sum int
 
 	for _, line := range lines {
 		if line != "" {
@@ -33,57 +34,45 @@ func partOne() {
 
 		}
 	}
+	return left, right
+}
+
+func partOne(input string) int {
+	right, left := parseInput(input)
 	sort.Ints(left)
 	sort.Ints(right)
+	sum := 0
 
 	for i := 0; i < len(right); i++ {
 		diff := int(math.Abs(float64(left[i] - right[i])))
 		sum += diff
 	}
-
-	fmt.Println(sum)
-
+	return sum
 }
 
-func partTwo() {
-	file, err := os.ReadFile("input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	lines := strings.Split(string(file), "\n")
-
-	var left []int
-	var right []int
-	var sum int
+func partTwo(input string) int {
+	right, left := parseInput(input)
 	count := make(map[int]int)
-
-	for _, line := range lines {
-		if line != "" {
-			parsedRow := strings.Split(line, "   ")
-			num1, _ := strconv.Atoi(parsedRow[0])
-			num2, _ := strconv.Atoi(parsedRow[1])
-
-			left = append(left, num1)
-			right = append(right, num2)
-
-		}
-	}
+	sum := 0
 
 	for _, num := range right {
 		count[num]++
 	}
 
-	for _, num := range left {
+	for _, num := rangerange left {
 		occurences := count[num]
 		result := num * occurences
 		sum += result
 	}
 
-	fmt.Println(sum)
+	return sum
 
 }
 func main() {
-	partOne()
-	partTwo()
+	input := "input.txt"
+	part1 := partOne(input)
+	part2 := partTwo(input)
+
+	fmt.Println("Answer for day1 part1:", part1)
+	fmt.Println("Answer for day1 part2:", part2)
 }
